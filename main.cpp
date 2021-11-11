@@ -9,6 +9,8 @@
    a gcd function implemented using euclid's algorithm
       The pico does not have instruction for division or mod meaning I had to
 	  use subtraction
+	  Alternative method is to use the hardware divisor for a future update
+   a square function
    
  */
 
@@ -20,7 +22,9 @@
 extern "C" int max32(int num1, int num2);
 extern "C" int fibo(int n);
 extern "C" int gcd(int x, int y);
-extern "C" void squar(uint32_t nums[], size_t count);
+
+// not implemented yet
+extern "C" void square(uint32_t nums[], size_t count);
 
 int main()
 {
