@@ -10,7 +10,7 @@
       The pico does not have instruction for division or mod meaning I had to
 	  use subtraction
 	  Alternative method is to use the hardware divisor for a future update
-   a square function
+   a square function that squares the values of an uint32_t array
    
  */
 
@@ -22,8 +22,7 @@
 extern "C" int max32(int num1, int num2);
 extern "C" int fibo(int n);
 extern "C" int gcd(int x, int y);
-
-// not implemented yet
+extern "C" int gcdHWDivider(int x, int y);
 extern "C" void square(uint32_t nums[], size_t count);
 
 int main()
@@ -43,6 +42,21 @@ int main()
 		}
 		sleep_ms(1000);
 		std::cout << "GCD " << gcd(48, 18) << std::endl;
+		std::cout << "GCD with HW " << gcdHWDivider(18, 0) << std::endl;
+		std::cout << "GCD with HW " << gcdHWDivider(0, 18) << std::endl;
+
+
+		std::cout << "GCD with HW " << gcdHWDivider(48, 18) << std::endl;
+		std::cout << "GCD with HW " << gcdHWDivider(18, 48) << std::endl;
+		std::cout << "GCD with HW " << gcdHWDivider(18, 18) << std::endl;
+		std::cout << "GCD with HW " << gcdHWDivider(18, 2147483647) << std::endl;
+		std::cout << "GCD without HW " << gcd(18, 2147483647) << std::endl;
+
+		uint32_t arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
+		square(arr, sizeof arr / sizeof *arr);
+		for (auto val : arr) {
+			std::cout << val << std::endl;
+		}
 	}
 
 	return 0;
