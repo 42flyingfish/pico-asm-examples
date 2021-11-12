@@ -36,7 +36,6 @@ fibo:
 
 .global gcd
 
-# Also recursive
 # using euclid's algo
 gcd:
 1:
@@ -51,6 +50,54 @@ gcd:
 1:
   bx lr
 
+
+.macro __divider_delay
+// delay 8 cycles
+   b 3f
+3: b 3f
+3: b 3f
+3: b 3f
+3:
+.endm
+
+.global gcdHWDivider
+
+gcdHWDivider:
+1: cmp r0, r1
+  bhi 2f
+  mov r3, r1
+  mov r1, r0
+  mov r0, r3
+  cmp r1, #0
+  beq 1f
+2:
+  // load the offset of sio into r3
+  ldr r3, =0xd0000000
+  str r0, [r3, #0x068]
+  str r1, [r3, #0x06c]
+  __divider_delay
+  mov r0, r1
+  ldr r1, [r3, #0x074]
+  ldr r3, [r3, #0x070]
+  cmp r1, #0
+  bne 2b
+1:
+  bx lr
+
+
 .global square
 square:
-  bx lr
+  cmp r1, #0
+  beq 2f
+  push {r4}
+  mov r3, #0
+1:
+  ldr r4, [r0, r3]
+  mul r4, r4, r4
+  str r4, [r0, r3]
+  add r3, #4
+  sub r1, #1
+  bne 1b
+
+  pop {r4}
+2:  bx lr
