@@ -63,6 +63,9 @@ gcd:
 .global gcdHWDivider
 
 gcdHWDivider:
+push {r4, lr}
+// load the offset of sio into r3
+ldr r4, =0xd0000000
 1: cmp r0, r1
   bhi 2f
   mov r3, r1
@@ -71,18 +74,16 @@ gcdHWDivider:
   cmp r1, #0
   beq 1f
 2:
-  // load the offset of sio into r3
-  ldr r3, =0xd0000000
-  str r0, [r3, #0x068]
-  str r1, [r3, #0x06c]
+  str r0, [r4, #0x068]
+  str r1, [r4, #0x06c]
   __divider_delay
   mov r0, r1
-  ldr r1, [r3, #0x074]
-  ldr r3, [r3, #0x070]
+  ldr r1, [r4, #0x074]
+  ldr r3, [r4, #0x070]
   cmp r1, #0
   bne 2b
 1:
-  bx lr
+  pop {r4, pc}
 
 
 .global square
