@@ -11,6 +11,7 @@
 	  use subtraction
 	  Alternative method is to use the hardware divisor for a future update
    a square function that squares the values of an uint32_t array
+   a gcd function that uses the hardware divider. This relies on SIO.
    
  */
 
@@ -57,6 +58,8 @@ int main()
 		for (auto val : arr) {
 			std::cout << val << std::endl;
 		}
+	    std::cout << "GCD with HW " << gcdHWDivider(18, 2147483647) << std::endl;
+	    
 	}
 
 	return 0;
