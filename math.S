@@ -1,7 +1,7 @@
 .global max32
 
-# args in r0, r1
-# return value should be in r0
+// args in r0, r1
+// return value should be in r0
 max32:
   cmp r0, r1
   bhi 1f
@@ -11,18 +11,18 @@ max32:
 
 .global fibo
 
-# This is recursive
-# Do not go too deep
+// This is recursive
+// Do not go too deep
 fibo:
   push {r4, r5, lr}
   mov r4, r0
-  @ if 0 return 0
+  // if 0 return 0
   cmp r0, #0
   beq 1f
-  @ if 1 return 1
+  // if 1 return 1
   cmp r0, #1
   beq 1f
-  @ else return fibo(n-1) + fibo(n-2)
+  // else return fibo(n-1) + fibo(n-2)
   sub r0, #1
   bl fibo
   mov r5, r0
@@ -36,7 +36,7 @@ fibo:
 
 .global gcd
 
-# using euclid's algo
+// using euclid's algo
 gcd:
 1:
   cmp r0, r1
@@ -65,6 +65,8 @@ gcd:
 gcdHWDivider:
 push {r4, lr}
 // load the offset of sio into r3
+// according to the data sheet, the divder is at
+// SIO 0xd0000000 with an offset of #0x074
 ldr r4, =0xd0000000
 1: cmp r0, r1
   bhi 2f
@@ -76,8 +78,11 @@ ldr r4, =0xd0000000
 2:
   str r0, [r4, #0x068]
   str r1, [r4, #0x06c]
+  // according the document, we need to delay by 8 cycles
   __divider_delay
   mov r0, r1
+  // while the quotient is unused, the documentation
+  // recommends reading both the remainder and quotion in that order
   ldr r1, [r4, #0x074]
   ldr r3, [r4, #0x070]
   cmp r1, #0
